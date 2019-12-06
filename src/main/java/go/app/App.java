@@ -32,10 +32,22 @@ public class App {
 
             // get form data values
             String name = req.queryParams("firstName");
+            String language = req.queryParams("language");
+
+            String greeting = "Invalid language";
+
+            if (language.equals("afr")) {
+                greeting = "Goeie dag, " + name;
+            } else if ("eng".equals(language)) {
+                greeting = "Good day, " + name;
+            } else if ("xhosa".equals(language)) {
+                greeting = "Molo, " + name;
+            }
+
 
             // put the values from the form for Handlebars to use
             Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("name", name);
+            dataMap.put("greeting", greeting);
 
             //
             return new ModelAndView(dataMap, "hello.hbs");

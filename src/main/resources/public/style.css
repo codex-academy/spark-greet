@@ -1,5 +1,5 @@
 body {
-    background-color: dodgerblue;
+    background-color: SteelBlue;
     color: white;
     font-family: sans-serif;
 }
@@ -7,4 +7,8 @@ body {
 .container {
     margin: auto;
     width: 80%;
+}
+
+.language {
+    padding: 1em;
 }
