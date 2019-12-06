@@ -1,35 +1,19 @@
-# WebApps using Java Spark
+# Java Spark App deployed to Heroku
 
-http://sparkjava.com/
-http://sparkjava.com/documentation
+App deployed at: https://spark-greet.herokuapp.com/
 
-## Setup
+* http://sparkjava.com/
+* http://sparkjava.com/documentation
+* https://devcenter.heroku.com/articles/deploying-java-applications-with-the-heroku-maven-plugin
 
-* Create a maven project in IntelliJ called `HelloApp`.
-* Add `Java Spark`, `Handlebars` & logging for `Java Spark` by adding the entries below to your `pom.xml` file
+A Spark Java App using Handlebars.
 
-```xml
-<dependencies>
-        <dependency>
-            <groupId>com.sparkjava</groupId>
-            <artifactId>spark-core</artifactId>
-            <version>2.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.21</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sparkjava</groupId>
-            <artifactId>spark-template-handlebars</artifactId>
-            <version>2.7.1</version>
-        </dependency>
-    </dependencies>
-```
+Deployment steps:
 
-Create a new java class called `App` in a package called `hello`. Add a main method to the `App` class.
+* `git init`  // only once
+* `git add .`
+* `git commit -m "initial commit"`
+* `mvn clean heroku:deploy`
 
-Add this code to the main method:
 
 

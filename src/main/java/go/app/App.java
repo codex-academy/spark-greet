@@ -20,7 +20,10 @@ public class App {
 
 
     public static void main(String[] args) {
+        staticFiles.location("/public"); // Static files
+
         port(getHerokuAssignedPort());
+
         get("/", (req, res) -> {
             return new ModelAndView(new HashMap<>(), "index.hbs");
         }, new HandlebarsTemplateEngine());
