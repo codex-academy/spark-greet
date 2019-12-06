@@ -8,12 +8,16 @@ App deployed at: https://spark-greet.herokuapp.com/
 
 A Spark Java App using Handlebars.
 
-Deployment steps:
+## Deployment steps
 
-* `git init`  // only once
+Do this once:
+
+* `git init`
 * `git add .`
 * `git commit -m "initial commit"`
+* `heroku create` - you will need a heroku account.
+
+Then deploy & redeploy using:
+
 * `mvn clean heroku:deploy`
-
-
 
