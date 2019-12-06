@@ -28,12 +28,19 @@ public class App {
             return new ModelAndView(new HashMap<>(), "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/hello", (req, res) -> {
+        post("/greet", (req, res) -> {
 
+            // get form data values
+            String name = req.queryParams("firstName");
+
+            // put the values from the form for Handlebars to use
             Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("name", "André");
+            dataMap.put("name", name);
+
+            //
             return new ModelAndView(dataMap, "hello.hbs");
 
         }, new HandlebarsTemplateEngine());
+
     }
 }
