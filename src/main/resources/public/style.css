@@ -9,6 +9,11 @@ body {
     width: 80%;
 }
 
+.counter {
+    font-size: 200%;
+    text-align: center;
+}
+
 .language {
     padding: 1em;
 }

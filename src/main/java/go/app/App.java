@@ -20,12 +20,19 @@ public class App {
 
 
     public static void main(String[] args) {
+
+        Greeter greeter = new Greeter();
+
         staticFiles.location("/public"); // Static files
 
         port(getHerokuAssignedPort());
 
         get("/", (req, res) -> {
-            return new ModelAndView(new HashMap<>(), "index.hbs");
+
+            Map<String, String> dataMap = new HashMap<>();
+            dataMap.put("counter", greeter.getCount().toString());
+
+            return new ModelAndView(dataMap, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/greet", (req, res) -> {
@@ -34,19 +41,11 @@ public class App {
             String name = req.queryParams("firstName");
             String language = req.queryParams("language");
 
-            String greeting = "Invalid language";
-
-            if (language.equals("afr")) {
-                greeting = "Goeie dag, " + name;
-            } else if ("eng".equals(language)) {
-                greeting = "Good day, " + name;
-            } else if ("xhosa".equals(language)) {
-                greeting = "Molo, " + name;
-            }
-
+            String greeting = greeter.greet(name, language);
 
             // put the values from the form for Handlebars to use
             Map<String, String> dataMap = new HashMap<>();
+            dataMap.put("counter", greeter.getCount().toString());
             dataMap.put("greeting", greeting);
 
             //
