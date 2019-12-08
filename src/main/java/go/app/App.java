@@ -2,7 +2,8 @@ package go.app;
 
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,40 +19,54 @@ public class App {
         return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 
+    static String getDatabaseURL(String defualtJdbcUrl) {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("DATABASE_URL") != null) {
+            return processBuilder.environment().get("DATABASE_URL");
+        }
+        return defualtJdbcUrl; //return default port if heroku-port isn't set (i.e. on localhost)
+    }
+
 
     public static void main(String[] args) {
 
-        Greeter greeter = new Greeter();
+        try {
+            Connection connection = DriverManager.getConnection(getDatabaseURL("jdbc:postgresql://localhost/greeter"));
 
-        staticFiles.location("/public"); // Static files
+            IGreeter greeter = new GreeterJDBC(connection);
 
-        port(getHerokuAssignedPort());
+            staticFiles.location("/public"); // Static files
 
-        get("/", (req, res) -> {
+            port(getHerokuAssignedPort());
 
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("counter", greeter.getCount().toString());
+            get("/", (req, res) -> {
 
-            return new ModelAndView(dataMap, "index.hbs");
-        }, new HandlebarsTemplateEngine());
+                Map<String, String> dataMap = new HashMap<>();
+                dataMap.put("counter", greeter.getCount().toString());
 
-        post("/greet", (req, res) -> {
+                return new ModelAndView(dataMap, "index.hbs");
+            }, new HandlebarsTemplateEngine());
 
-            // get form data values
-            String name = req.queryParams("firstName");
-            String language = req.queryParams("language");
+            post("/greet", (req, res) -> {
 
-            String greeting = greeter.greet(name, language);
+                // get form data values
+                String name = req.queryParams("firstName");
+                String language = req.queryParams("language");
 
-            // put the values from the form for Handlebars to use
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("counter", greeter.getCount().toString());
-            dataMap.put("greeting", greeting);
+                String greeting = greeter.greet(name, language);
 
-            //
-            return new ModelAndView(dataMap, "hello.hbs");
+                // put the values from the form for Handlebars to use
+                Map<String, String> dataMap = new HashMap<>();
+                dataMap.put("counter", greeter.getCount().toString());
+                dataMap.put("greeting", greeting);
 
-        }, new HandlebarsTemplateEngine());
+                //
+                return new ModelAndView(dataMap, "hello.hbs");
+
+            }, new HandlebarsTemplateEngine());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }
