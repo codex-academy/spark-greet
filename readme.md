@@ -51,7 +51,7 @@ Now run *psql* as the *postgres* user:
 sudo -u postgres psql;
 ```
 
-Grant the `coder` user access to the `my_products` database by running this command: 
+Grant the `coder` user access to the `greeter` database by running this command: 
 
 ```
 grant all privileges on database greeter to coder;
