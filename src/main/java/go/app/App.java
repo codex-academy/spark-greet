@@ -2,8 +2,12 @@ package go.app;
 
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,19 +23,35 @@ public class App {
         return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 
-    static String getDatabaseURL(String defualtJdbcUrl) {
+    static Connection getDatabaseConnection(String defualtJdbcUrl) throws URISyntaxException, SQLException {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        if (processBuilder.environment().get("DATABASE_URL") != null) {
-            return processBuilder.environment().get("DATABASE_URL");
+        String database_url = processBuilder.environment().get("DATABASE_URL");
+        if (database_url != null) {
+
+            URI uri = new URI(database_url);
+            String[] hostParts = uri.getUserInfo().split(":");
+            String username = hostParts[0];
+            String password = hostParts[1];
+            String host = uri.getHost();
+
+            int port = uri.getPort();
+
+            String path = uri.getPath();
+            String url = String.format("jdbc:postgresql://%s:%s%s", host, port, path);
+
+            return DriverManager.getConnection(url, username, password);
+
         }
-        return defualtJdbcUrl; //return default port if heroku-port isn't set (i.e. on localhost)
+
+        return DriverManager.getConnection(defualtJdbcUrl);
+
     }
 
 
     public static void main(String[] args) {
 
         try {
-            Connection connection = DriverManager.getConnection(getDatabaseURL("jdbc:postgresql://localhost/greeter"));
+            Connection connection = getDatabaseConnection("jdbc:postgresql://localhost/greeter");
 
             IGreeter greeter = new GreeterJDBC(connection);
 
@@ -52,14 +72,16 @@ public class App {
                 // get form data values
                 String name = req.queryParams("firstName");
                 String language = req.queryParams("language");
-
-                String greeting = greeter.greet(name, language);
-
-                // put the values from the form for Handlebars to use
                 Map<String, String> dataMap = new HashMap<>();
-                dataMap.put("counter", greeter.getCount().toString());
-                dataMap.put("greeting", greeting);
 
+                if (language == null) {
+                    dataMap.put("error", "Language not selected!");
+                } else {
+                    String greeting = greeter.greet(name, language);
+                    // put the values from the form for Handlebars to use
+                    dataMap.put("counter", greeter.getCount().toString());
+                    dataMap.put("greeting", greeting);
+                }
                 //
                 return new ModelAndView(dataMap, "hello.hbs");
 
