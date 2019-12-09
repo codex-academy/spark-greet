@@ -1,0 +1,27 @@
+{{#partial "body"}}
+    <h1>Greeted users</h1>
+    <div class="error">
+        {{error}}
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Counter</th>
+            </tr>
+            {{#each greeted_people}}
+                <tr>
+                    <td>{{this.firstName}}</td>
+                    <td>{{counter}}</td>
+                </tr>
+            {{/each}}
+        </table>
+
+    </div>
+
+    <div>
+        <a href="/">back</a>
+    </div>
+{{/partial}}
+
+{{> layout.hbs }}

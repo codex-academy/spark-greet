@@ -1,6 +1,7 @@
 package go.app;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Greeter extends GreeterBase implements IGreeter {
@@ -15,7 +16,14 @@ public class Greeter extends GreeterBase implements IGreeter {
     }
 
     @Override
+    public List<Person> greetedPeople() {
+        return null;
+    }
+
+    @Override
     public Integer getCount() {
         return greetedMap.keySet().size();
     }
+
+
 }

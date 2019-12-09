@@ -4,6 +4,12 @@ body {
     font-family: sans-serif;
 }
 
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
 .container {
     margin: auto;
     width: 80%;
@@ -11,11 +17,16 @@ body {
 
 .counter {
     font-size: 200%;
-    text-align: center;
+    text-align: orange;
 }
 
 .error {
-    color: red
+    color: orange;
+}
+
+input[type="submit"], input[type="button"] {
+    padding: 1em;
+    background-color: orange;
 }
 
 .language {

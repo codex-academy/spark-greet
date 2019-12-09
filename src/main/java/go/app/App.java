@@ -1,6 +1,8 @@
 package go.app;
 
+import go.app.transformer.JsonTransformer;
 import spark.ModelAndView;
+import spark.Route;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.net.URI;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static spark.Spark.*;
+
 
 public class App {
 
@@ -54,6 +57,7 @@ public class App {
             Connection connection = getDatabaseConnection("jdbc:postgresql://localhost/greeter");
 
             IGreeter greeter = new GreeterJDBC(connection);
+            Api api = new Api(greeter);
 
             staticFiles.location("/public"); // Static files
 
@@ -82,10 +86,22 @@ public class App {
                     dataMap.put("counter", greeter.getCount().toString());
                     dataMap.put("greeting", greeting);
                 }
+
                 //
                 return new ModelAndView(dataMap, "hello.hbs");
 
             }, new HandlebarsTemplateEngine());
+
+            get("/greeted", (req, res) -> {
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("greeted_people", greeter.greetedPeople());
+                return new ModelAndView(dataMap, "greeted.hbs");
+            }, new HandlebarsTemplateEngine());
+
+            get("/api/greeted", api.greetedUsers(), new JsonTransformer());
+            post("/api/greet", api.greetUser(), new JsonTransformer());
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

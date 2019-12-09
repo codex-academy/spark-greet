@@ -1,6 +1,8 @@
 package go.app;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GreeterJDBC extends GreeterBase {
@@ -36,6 +38,26 @@ public class GreeterJDBC extends GreeterBase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Person> greetedPeople() {
+        List<Person> greetedList = new ArrayList<>();
+        try {
+            CallableStatement findGreetedPeople = connection.prepareCall("select * from person");
+            ResultSet greetedPeople = findGreetedPeople.executeQuery();
+            while(greetedPeople.next()) {
+                //
+                greetedList.add(new Person(
+                        greetedPeople.getInt("id"),
+                        greetedPeople.getString("first_name"),
+                        greetedPeople.getInt("counter")));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return greetedList;
     }
 
     @Override
