@@ -1,5 +1,9 @@
 package go.app;
 
+import com.google.gson.Gson;
+import go.app.greet.GreetParams;
+import go.app.greet.Greeting;
+import go.app.greeter.IGreeter;
 import spark.Route;
 
 public class Api {
@@ -11,10 +15,18 @@ public class Api {
 
     Route greetUser () {
         return (req, res) -> {
-            String firstName = req.queryParams("firstName");
-            String language = req.queryParams("language");
-            String greeting = greeter.greet(firstName, language);
-            return new Greeting(greeting);
+            res.type("application/json");
+
+             GreetParams greetParams = new Gson()
+                     .fromJson(req.body(), GreetParams.class);
+
+            String greeting = greeter.greet(
+                    greetParams.getFirstName(),
+                    greetParams.getLanguage());
+
+            Integer userCount = greeter.getCount();
+
+            return new Greeting(greeting, userCount);
         };
     }
 

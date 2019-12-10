@@ -1,8 +1,9 @@
 package go.app;
 
+import go.app.greeter.GreeterJDBC;
+import go.app.greeter.IGreeter;
 import go.app.transformer.JsonTransformer;
 import spark.ModelAndView;
-import spark.Route;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.net.URI;

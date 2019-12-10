@@ -1,4 +1,6 @@
-package go.app;
+package go.app.greeter;
+
+import go.app.greet.Person;
 
 import java.util.List;
 

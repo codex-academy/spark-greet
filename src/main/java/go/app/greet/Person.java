@@ -1,4 +1,4 @@
-package go.app;
+package go.app.greet;
 
 import java.io.Serializable;
 

@@ -16,12 +16,18 @@ th, td {
 }
 
 .counter {
-    font-size: 200%;
-    text-align: orange;
+    margin: 1em;
+    font-size: 300%;
+    text-align: center;
 }
 
 .error {
     color: orange;
+}
+
+input[type="text"] {
+    padding: 0.5em;
+    font-size: 125%;
 }
 
 input[type="submit"], input[type="button"] {

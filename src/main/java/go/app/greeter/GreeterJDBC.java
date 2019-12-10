@@ -1,4 +1,6 @@
-package go.app;
+package go.app.greeter;
+
+import go.app.greet.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class GreeterJDBC extends GreeterBase {
     public List<Person> greetedPeople() {
         List<Person> greetedList = new ArrayList<>();
         try {
-            CallableStatement findGreetedPeople = connection.prepareCall("select * from person");
+            CallableStatement findGreetedPeople = connection.prepareCall("select * from person order by first_name");
             ResultSet greetedPeople = findGreetedPeople.executeQuery();
             while(greetedPeople.next()) {
                 //

@@ -1,7 +1,4 @@
-package go.app;
-
-import java.util.HashMap;
-import java.util.Map;
+package go.app.greeter;
 
 public abstract class GreeterBase implements IGreeter {
 
